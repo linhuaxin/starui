@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react'
-import { Message, ContentWrapper, Icon, Content } from './style'
+import { Content, ContentWrapper, Icon, Message } from './style'
 import { CSSTransition } from 'react-transition-group'
 import ReactDOM from 'react-dom'
-import Mask from '../mask/style'
-import { Wrapper } from '../modal/style'
 
 class MessageComponent extends PureComponent {
   constructor(props) {
