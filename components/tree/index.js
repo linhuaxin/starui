@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react'
-import { Tree, Node, IconArrow, Text } from './style'
+import { OL, LI, IconArrow, Text } from './style'
 import utils from '../../utils/utils'
 
-function preOrder(node, level, expandedKeys, callback) {
+function preOrder(node, level, callback) {
   if (node instanceof Array) { // 处理森林的情况
     for (var i = 0, len = node.length; i < len; i++) {
-      preOrder(node[i], level, expandedKeys, callback)
+      preOrder(node[i], level, callback)
     }
   } else if (node) {
     let children = node.children
@@ -14,10 +14,10 @@ function preOrder(node, level, expandedKeys, callback) {
       let isLeaf = !children
       callback(node, level, isLeaf)
     }
-    if (children && expandedKeys.indexOf(node.id) !== -1) {
+    if (children) {
       level++
       for (let i = 0, len = children.length; i < len; i++) {
-        preOrder(children[i], level, expandedKeys, callback)
+        preOrder(children[i], level, callback)
       }
     }
   }
@@ -26,12 +26,19 @@ function preOrder(node, level, expandedKeys, callback) {
 class TreeComponent extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      visible: false,
+      renderTree: false
+    }
     this.handleSelect = this.handleSelect.bind(this)
   }
 
   render() {
-    const { list = [] } = this.props
+    const { list = [], defaultExpandAll = false, blockNode } = this.props
+
+    if (list.length === 0) {
+      return null
+    }
     let { selectedKeys, expandedKeys } = this.state
 
     if (!selectedKeys) {
@@ -39,43 +46,67 @@ class TreeComponent extends PureComponent {
       this.state.selectedKeys = selectedKeys
     }
     if (!expandedKeys) {
-      expandedKeys = this.props.expandedKeys || []
+      expandedKeys = this.props.expandedKeys || (defaultExpandAll ? list.map(item => {
+        return item.id
+      }) : [])
       this.state.expandedKeys = expandedKeys
     }
     const treeList = utils.buildTree(JSON.parse(JSON.stringify(list)))
-    const treeNodes = []
 
     // 给节点增加 level
-    preOrder(treeList, 0, expandedKeys, (node, level, isLeaf) => {
+    preOrder(treeList, 0, (node, level, isLeaf) => {
       node.level = level
       node.isLeaf = isLeaf
+    })
 
+    let nodes = [[]]
+    let stack = []
+    if (treeList instanceof Array) { // 处理森林的情况
+      stack = [...treeList]
+    } else {
+      stack.push(treeList)
+    }
+    while (stack.length !== 0) {
+      let currentNode = stack.shift()
+      let { id, level, isLeaf, parentId, children, name } = currentNode
       let iconArrow
+
+      const type = expandedKeys.indexOf(id) === -1 ? 'right' : 'down'
       if (!isLeaf) {
-        const type = expandedKeys.indexOf(node.id) === -1 ? 'right' : 'down'
         iconArrow = (
           <IconArrow
             className="icon"
             aria-hidden="true"
-            onClick={() => this.handleIconArrowClick(node)}
+            onClick={() => this.handleIconArrowClick(currentNode)}
           >
             <use href={ '#iconcaret' + type }></use>
           </IconArrow>
         )
       }
 
-      treeNodes.push(
-        <Node key={node.id} level={node.level}>
+      if (children) {
+        nodes[id] = []
+        stack = stack.concat(children)
+      }
+
+      nodes[parentId].push(
+        <LI
+          className={ isLeaf ? '' : type}
+          level={level}
+          key={id}
+        >
           { iconArrow }
           <Text
-            selected={selectedKeys.indexOf(node.id) !== -1}
-            onClick={() => this.handleSelect(node)}
-          >{ node.name }</Text>
-        </Node>
+            blockNode
+            selected={selectedKeys.indexOf(id) !== -1}
+            onClick={() => this.handleSelect(currentNode)}
+          >{ name }</Text>
+          { children ? <OL>{ nodes[id] }</OL> : null }
+        </LI>
       )
-    })
+    }
 
-    return <Tree>{ treeNodes }</Tree>
+    return <OL>{ nodes[0] }</OL>
   }
 
   /**
@@ -92,6 +123,7 @@ class TreeComponent extends PureComponent {
     }
 
     this.setState({
+      visible: true,
       expandedKeys: [...expandedKeys]
     })
   }
