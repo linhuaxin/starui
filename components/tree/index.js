@@ -4,7 +4,7 @@ import utils from '../../utils/utils'
 
 function preOrder(node, level, callback) {
   if (node instanceof Array) { // 处理森林的情况
-    for (var i = 0, len = node.length; i < len; i++) {
+    for (let i = 0, len = node.length; i < len; i++) {
       preOrder(node[i], level, callback)
     }
   } else if (node) {
@@ -97,7 +97,7 @@ class TreeComponent extends PureComponent {
         >
           { iconArrow }
           <Text
-            blockNode
+            blockNode={blockNode}
             selected={selectedKeys.indexOf(id) !== -1}
             onClick={() => this.handleSelect(currentNode)}
           >{ name }</Text>

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 const nodePaddingLeft = 18
 
 export const OL = styled.ul`
+  font-size: 14px;
 `
 
 export const LI = styled.li`
@@ -37,7 +38,7 @@ export const IconArrow = styled.svg`
 export const Text = styled.span`
   display: inline-block;
   height: 24px;
-  width: calc(100% - 24px);
+  width: ${props => props.blockNode ? 'calc(100% - 24px)' : ''};
   margin: 0;
   padding: 0 5px;
   color: rgba(0, 0, 0, 0.65);
