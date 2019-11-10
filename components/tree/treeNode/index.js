@@ -12,7 +12,7 @@ export default function TreeNodeComponent({ isLeaf, level, id, type, children, h
       return {
         isOver: !!monitor.isOver()
       }
-    },
+    }
   })
 
   return (

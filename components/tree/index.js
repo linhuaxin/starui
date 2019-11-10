@@ -38,7 +38,7 @@ class TreeComponent extends PureComponent {
   }
 
   render() {
-    const { defaultExpandAll = false, blockNode } = this.props
+    const { defaultExpandAll = false, blockNode, onDragEnd } = this.props
     let { selectedKeys, expandedKeys, list } = this.state
 
     if (!list) {
@@ -163,6 +163,11 @@ class TreeComponent extends PureComponent {
     obj.parentId = id
     console.log('parentId:' + id)
     this.setState({ list: [...list] })
+
+    let { onDragEnd } = this.props
+    if (onDragEnd) {
+      onDragEnd(item, obj)
+    }
   }
 }
 
