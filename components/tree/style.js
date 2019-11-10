@@ -6,29 +6,6 @@ export const OL = styled.ul`
   font-size: 14px;
 `
 
-export const LI = styled.li`
-  padding-left: ${props => props.level * nodePaddingLeft + 'px'};
-  overflow: hidden;
-  
-  &.right {
-    ul {
-      li {
-        max-height: 0;
-        transition: max-height 200ms linear;
-      }
-    }
-  }
-  
-  &.down {
-    ul {
-      li {
-        max-height: 1000px;
-        transition: max-height 5s linear;
-      }
-    }
-  }
-`
-
 export const IconArrow = styled.svg`
   width: 10px;
   height: 10px;

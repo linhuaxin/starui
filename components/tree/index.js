@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react'
-import { OL, LI, IconArrow, Text } from './style'
+import { OL, IconArrow, Text } from './style'
 import utils from '../../utils/utils'
+import HTML5Backend from 'react-dnd-html5-backend'
+import { DndProvider } from 'react-dnd'
+import TreeNode from './treeNode'
 
 function preOrder(node, level, callback) {
   if (node instanceof Array) { // 处理森林的情况
@@ -28,19 +31,23 @@ class TreeComponent extends PureComponent {
     super(props)
     this.state = {
       visible: false,
-      renderTree: false
+      renderTree: false,
+      list: null
     }
     this.handleSelect = this.handleSelect.bind(this)
   }
 
   render() {
-    const { list = [], defaultExpandAll = false, blockNode } = this.props
+    const { defaultExpandAll = false, blockNode } = this.props
+    let { selectedKeys, expandedKeys, list } = this.state
 
-    if (list.length === 0) {
-      return null
+    if (!list) {
+      list = this.props.list || []
+      if (list.length === 0) {
+        return null
+      }
+      this.state.list = list
     }
-    let { selectedKeys, expandedKeys } = this.state
-
     if (!selectedKeys) {
       selectedKeys = this.props.selectedKeys || []
       this.state.selectedKeys = selectedKeys
@@ -66,6 +73,7 @@ class TreeComponent extends PureComponent {
     } else {
       stack.push(treeList)
     }
+
     while (stack.length !== 0) {
       let currentNode = stack.shift()
       let { id, level, isLeaf, parentId, children, name } = currentNode
@@ -90,10 +98,13 @@ class TreeComponent extends PureComponent {
       }
 
       nodes[parentId].push(
-        <LI
-          className={ isLeaf ? '' : type}
+        <TreeNode
+          id={id}
+          isLeaf={isLeaf}
           level={level}
           key={id}
+          type={type}
+          handleDrag={this.handleDrag.bind(this)}
         >
           { iconArrow }
           <Text
@@ -102,11 +113,15 @@ class TreeComponent extends PureComponent {
             onClick={() => this.handleSelect(currentNode)}
           >{ name }</Text>
           { children ? <OL>{ nodes[id] }</OL> : null }
-        </LI>
+        </TreeNode>
       )
     }
 
-    return <OL>{ nodes[0] }</OL>
+    return (
+      <DndProvider backend={HTML5Backend}>
+        <OL>{ nodes[0] }</OL>
+      </DndProvider>
+    )
   }
 
   /**
@@ -135,6 +150,19 @@ class TreeComponent extends PureComponent {
     this.setState({
       selectedKeys: [node.id]
     })
+  }
+
+  /**
+   * 拖拽事件
+   */
+  handleDrag(item, e, id) {
+    let dragId = item.id
+    let list = this.state.list
+
+    let obj = utils.findObjectInArray(list, 'id', dragId)
+    obj.parentId = id
+    console.log('parentId:' + id)
+    this.setState({ list: [...list] })
   }
 }
 
