@@ -1,5 +1,5 @@
 import React from 'react'
-import { useDrag, useDrop } from 'react-dnd'
+import { useDrag } from 'react-dnd'
 import { Node } from './style'
 
 export default function NodeComponent({ isLeaf, level, id, type, children }) {

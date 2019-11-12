@@ -9,13 +9,14 @@ class CheckboxComponent extends PureComponent {
     this.state = {}
   }
 
+  componentWillReceiveProps(nextProps, nextContext) {
+    const { checked } = nextProps
+    this.setState({ checked })
+  }
+
   render() {
     let { children } = this.props
     let { checked } = this.state
-
-    if (typeof checked === 'undefined') {
-      this.state.checked = checked = this.props.checked
-    }
 
     return (
       <Wrapper>

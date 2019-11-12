@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-const nodePaddingLeft = 18
-
 export const OL = styled.ul`
   font-size: 14px;
 `

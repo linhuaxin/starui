@@ -32,32 +32,35 @@ class TreeComponent extends PureComponent {
     this.state = {
       visible: false,
       renderTree: false,
-      list: null
+      list: []
     }
     this.handleSelect = this.handleSelect.bind(this)
   }
 
-  render() {
-    const { defaultExpandAll = false, blockNode, onDragEnd } = this.props
-    let { selectedKeys, expandedKeys, list } = this.state
+  componentWillReceiveProps(nextProps) {
+    let {
+      list = [],
+      selectedKeys = [],
+      expandedKeys = [],
+      defaultExpandAll
+    } = nextProps
 
-    if (!list) {
-      list = this.props.list || []
-      if (list.length === 0) {
-        return null
-      }
-      this.state.list = list
-    }
-    if (!selectedKeys) {
-      selectedKeys = this.props.selectedKeys || []
-      this.state.selectedKeys = selectedKeys
-    }
-    if (!expandedKeys) {
-      expandedKeys = this.props.expandedKeys || (defaultExpandAll ? list.map(item => {
+    if (defaultExpandAll) {
+      expandedKeys = list.map(item => {
         return item.id
-      }) : [])
-      this.state.expandedKeys = expandedKeys
+      })
     }
+
+    this.setState({
+      list,
+      selectedKeys,
+      expandedKeys
+    })
+  }
+
+  render() {
+    const { blockNode } = this.props
+    const { selectedKeys, expandedKeys, list } = this.state
     const treeList = utils.buildTree(JSON.parse(JSON.stringify(list)))
 
     // 给节点增加 level
@@ -87,7 +90,7 @@ class TreeComponent extends PureComponent {
             aria-hidden="true"
             onClick={() => this.handleIconArrowClick(currentNode)}
           >
-            <use href={ '#iconcaret' + type }></use>
+            <use href={'#iconcaret' + type}></use>
           </IconArrow>
         )
       }
@@ -106,20 +109,20 @@ class TreeComponent extends PureComponent {
           type={type}
           handleDrag={this.handleDrag.bind(this)}
         >
-          { iconArrow }
+          {iconArrow}
           <Text
             blockNode={blockNode}
             selected={selectedKeys.indexOf(id) !== -1}
             onClick={() => this.handleSelect(currentNode)}
-          >{ name }</Text>
-          { children ? <OL>{ nodes[id] }</OL> : null }
+          >{name}</Text>
+          {children ? <OL>{nodes[id]}</OL> : null}
         </TreeNode>
       )
     }
 
     return (
       <DndProvider backend={HTML5Backend}>
-        <OL>{ nodes[0] }</OL>
+        <OL>{nodes[0]}</OL>
       </DndProvider>
     )
   }
@@ -161,7 +164,6 @@ class TreeComponent extends PureComponent {
 
     let obj = utils.findObjectInArray(list, 'id', dragId)
     obj.parentId = id
-    console.log('parentId:' + id)
     this.setState({ list: [...list] })
 
     let { onDragEnd } = this.props
