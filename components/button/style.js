@@ -25,7 +25,6 @@ export const DefaultButton = styled(Button)`
     color: #40a9ff;
     border-color: #40a9ff;
   }
-  
 `
 
 export const PrimaryButton = styled(Button)`

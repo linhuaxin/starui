@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react'
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
+import _ from 'underscore'
 import { OL, IconArrow, Text } from './style'
 import utils from '../../utils/utils'
-import HTML5Backend from 'react-dnd-html5-backend'
-import { DndProvider } from 'react-dnd'
 import TreeNode from './treeNode'
 
 function preOrder(node, level, callback) {
@@ -162,7 +163,8 @@ class TreeComponent extends PureComponent {
     let dragId = item.id
     let list = this.state.list
 
-    let obj = utils.findObjectInArray(list, 'id', dragId)
+    let index = _.findIndex(list, { 'id': dragId })
+    let obj = list[index]
     obj.parentId = id
     this.setState({ list: [...list] })
 
