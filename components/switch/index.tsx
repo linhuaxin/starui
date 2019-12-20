@@ -6,21 +6,20 @@ export type SwitchChangeEventHandler = (checked: boolean, event: MouseEvent) => 
 export type SwitchClickEventHandler = SwitchChangeEventHandler
 
 interface SwitchProps {
-  className?: string
   prefixCls?: string
+  className?: string
+  style?: React.CSSProperties
+  defaultChecked?: boolean
+  checked?: boolean
   disabled?: boolean
+  autoFocus?: boolean
+  title?: string
+  loadingIcon?: React.ReactNode
   checkedChildren?: React.ReactNode
   unCheckedChildren?: React.ReactNode
   onChange?: SwitchChangeEventHandler
   onMouseUp?: MouseEventHandler<HTMLButtonElement>
   onClick?: SwitchClickEventHandler
-  tabIndex?: number
-  checked?: boolean
-  defaultChecked?: boolean
-  autoFocus?: boolean
-  loadingIcon?: React.ReactNode
-  style?: React.CSSProperties
-  title?: string
 }
 
 interface SwitchState {
@@ -57,7 +56,7 @@ class Switch extends Component<SwitchProps, SwitchState> {
     }
   }
 
-  static getDerivedStateFromProps(nextProps: any) {
+  static getDerivedStateFromProps(nextProps) {
     const { checked } = nextProps
     const newState: Partial<SwitchState> = {}
     if ('checked' in nextProps) {
@@ -66,7 +65,7 @@ class Switch extends Component<SwitchProps, SwitchState> {
     return newState
   }
 
-  setChecked(checked: boolean, e: any) {
+  setChecked(checked, e) {
     const { disabled, onChange } = this.props
     if (disabled) {
       return
