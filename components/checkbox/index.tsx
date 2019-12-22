@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, CSSProperties} from 'react'
 import classNames from "classnames";
 
 export type CheckboxChangeEventHandler = (checked: boolean, event: MouseEvent) => void
@@ -6,7 +6,7 @@ export type CheckboxChangeEventHandler = (checked: boolean, event: MouseEvent) =
 interface CheckboxProps {
   prefixCls?: string
   className?: string
-  style?: React.CSSProperties
+  style?: CSSProperties
   defaultChecked?: boolean
   checked?: boolean
   disabled?: boolean
