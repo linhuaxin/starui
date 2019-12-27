@@ -30,6 +30,7 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
 
   renderCheckbox() {
     const {
+      checked,
       context: { prefixCls }
     } = this.props
     const checkable = this.isCheckable()
@@ -38,7 +39,10 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
 
     return (
       <span
-        className={classNames(`${prefixCls}-checkbox`)}
+        className={classNames(
+          `${prefixCls}-checkbox`,
+          checked && `${prefixCls}-checkbox-checked`
+        )}
         onClick={this.onCheck}
       />
     )
@@ -49,6 +53,7 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
       title,
       context: { prefixCls }
     } = this.props
+
     const $title = (
       <span className={`${prefixCls}-title`}>
         {title}
@@ -63,9 +68,12 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
 
   render() {
     const {
-      level,
-      context: { prefixCls }
+      eventKey,
+      context: { prefixCls, keyEntities }
     } = this.props
+
+    const { level } = keyEntities[eventKey]
+
     return (
       <div
         className={classNames(

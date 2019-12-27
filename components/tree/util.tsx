@@ -1,12 +1,20 @@
-import {TreeNodeProps} from './TreeNode'
+import { Key } from './interface'
 
-export function getDataAndAria(props: Partial<TreeNodeProps>) {
-  const omitProps: Record<string, string> = {}
-  Object.keys(props).forEach(key => {
-    if (key.startsWith('data-') || key.startsWith('aria-')) {
-      omitProps[key] = props[key]
-    }
-  })
+export function arrAdd(list: Key[], value: Key) {
+  const clone = list.slice()
 
-  return omitProps
+  if (clone.indexOf(value) === -1) {
+    clone.push(value)
+  }
+  return clone
+}
+
+export function arrDel(list: Key[], value: Key) {
+  const clone = list.slice()
+  const index = clone.indexOf(value)
+
+  if (index >= 0) {
+    clone.splice(index, 1)
+  }
+  return clone
 }
