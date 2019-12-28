@@ -2,19 +2,9 @@ import React from 'react'
 import { TreeContextProps } from './contextTypes'
 
 export interface DataNode {
-  checkable?: boolean
-  children?: DataNode[]
-  disabled?: boolean
-  disableCheckbox?: boolean
-  icon?: IconType
-  isLeaf?: boolean
-  key: string | number
+  key?: string | number
   title?: React.ReactNode
-  selectable?: boolean
-  switcherIcon?: IconType
-
-  className?: string
-  style?: React.CSSProperties
+  children?: DataNode[]
 }
 
 export interface FlattenNode extends DataNode {
@@ -313,10 +303,6 @@ export interface MotionTreeNodeProps extends Omit<TreeNodeProps, 'domRef'> {
 }
 
 export interface Wrapper {
-  posEntities: Record<string, Entity>
-  keyEntities: Record<Key, Entity>
-}
-
-export type NodeInstance = React.Component<TreeNodeProps> & {
-  selectHandle?: HTMLSpanElement;
+  posEntities: Record<string, Entity>;
+  keyEntities: Record<Key, Entity>;
 }

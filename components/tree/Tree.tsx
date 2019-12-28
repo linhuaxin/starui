@@ -5,7 +5,6 @@ import { CheckInfo, EventDataNode, TreeProps, TreeState } from './interface'
 import { convertDataToEntities, flattenTreeData, parseCheckedKeys } from './utils/treeUtils'
 import { TreeContext } from './contextTypes'
 import { arrAdd, arrDel } from './util'
-import { conductCheck } from './utils/conductUtil'
 
 class Tree extends React.Component<TreeProps, TreeState> {
 
@@ -133,51 +132,7 @@ class Tree extends React.Component<TreeProps, TreeState> {
         .map(entity => entity.node)
 
       this.setUncontrolledState({ checkedKeys })
-    } else {
-      let { checkedKeys, halfCheckedKeys} = conductCheck(
-        [...oriCheckedKeys, key],
-        true,
-        keyEntities
-      )
-
-      if (!checked) {
-        const keySet = new Set(checkedKeys)
-        keySet.delete(key);
-        ({ checkedKeys, halfCheckedKeys } = conductCheck(
-          Array.from(keySet),
-          { checked: false, halfCheckedKeys },
-          keyEntities
-        ))
-      }
-
-      checkedObj = checkedKeys
-
-      eventObj.checkedNodes = []
-      eventObj.checkedNodesPositions = []
-      eventObj.halfCheckedKeys = []
-
-      checkedKeys.forEach(checkedKey => {
-        const entity = keyEntities[checkedKey]
-        if (!entity) return
-
-        const { node, pos } = entity
-
-        eventObj.checkedNodes.push(node)
-        eventObj.checkedNodesPositions.push({ node, pos })
-      })
-
-      this.setUncontrolledState({
-        checkedKeys,
-        halfCheckedKeys
-      })
     }
-  }
-
-  onNodeExpand = (
-    e: React.MouseEvent<HTMLDivElement>,
-    treeNode: EventDataNode
-  ) => {
-    return null
   }
 
   onFocus = () => {
@@ -208,8 +163,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
       }
     }
 
-    const keyEntities = newState.keyEntities || prevState.keyEntities
-
     if (checkable) {
       let checkedKeyEntity
 
@@ -224,11 +177,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
 
       if (checkedKeyEntity) {
         let { checkedKeys = [], halfCheckedKeys } = checkedKeyEntity
-
-        if (!props.checkStrictly) {
-          const conductKeys = conductCheck(checkedKeys, true, keyEntities);
-          ({ checkedKeys, halfCheckedKeys } = conductKeys)
-        }
 
         newState.checkedKeys = checkedKeys
         newState.halfCheckedKeys = halfCheckedKeys
@@ -260,7 +208,6 @@ class Tree extends React.Component<TreeProps, TreeState> {
       height,
       itemHeight
     } = this.props
-
     const {
       focused,
       flattenNodes,
@@ -273,21 +220,9 @@ class Tree extends React.Component<TreeProps, TreeState> {
       <TreeContext.Provider
         value={{
           prefixCls,
-          selectable,
-          showIcon,
-          icon,
-          switcherIcon,
-          draggable,
           checkable,
-          checkStrictly,
-          disabled,
           keyEntities,
-
-          loadData,
-          filterTreeNode,
-
-          onNodeCheck: this.onNodeCheck,
-          onNodeExpand: this.onNodeExpand
+          onNodeCheck: this.onNodeCheck
         }}
       >
         <div className={classNames(prefixCls)}>
