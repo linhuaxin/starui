@@ -1,4 +1,4 @@
-import { Key } from './interface'
+import { DataEntity, Key } from './interface'
 
 export function arrAdd(list: Key[], value: Key) {
   const clone = list.slice()
@@ -17,4 +17,31 @@ export function arrDel(list: Key[], value: Key) {
     clone.splice(index, 1)
   }
   return clone
+}
+
+export function conductExpandParent(keyList: Key[], keyEntities: Record<Key, DataEntity>) {
+  const expandedKeys = {}
+
+  function conductUp(key: Key) {
+    if (expandedKeys[key]) return
+
+    const entity = keyEntities[key]
+    if (!entity) return
+
+    expandedKeys[key] = true
+
+    const { parent, node } = entity
+
+    if (node.disabled) return
+
+    if (parent) {
+      conductUp(parent.key)
+    }
+  }
+
+  (keyList || []).forEach(key => {
+    conductUp(key)
+  })
+
+  return Object.keys(expandedKeys)
 }

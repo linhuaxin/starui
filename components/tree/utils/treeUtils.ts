@@ -8,29 +8,41 @@ import {
 } from '../interface'
 
 export function flattenTreeData(
-  treeData: DataNode[] = []
+  treeNodeList: DataNode[] = [],
+  expandedKeys: Key[] | true = [],
 ): FlattenNode[] {
   const flattenList: FlattenNode[] = []
 
-  function dig(list: DataNode[], level: number, parent: FlattenNode = null): FlattenNode[] {
+  function dig(list: DataNode[], parent: FlattenNode = null): FlattenNode[] {
     return list.map((treeNode, index) => {
-      const flattenNode = {
+      const pos: string = getPosition(parent ? parent.pos : '0', index)
+      const mergedKey = getKey(treeNode.key, pos)
+
+      // Add FlattenDataNode into list
+      const flattenNode: FlattenNode = {
         ...treeNode,
         parent,
-        children: [],
+        pos,
+        children: null,
         data: treeNode,
-        level
+        isStart: [...(parent ? parent.isStart : []), index === 0],
+        isEnd: [...(parent ? parent.isEnd : []), index === list.length - 1],
       }
 
       flattenList.push(flattenNode)
-      if (treeNode.children) {
-        flattenNode.children = dig(treeNode.children, level + 1, flattenNode)
+
+      // Loop treeNode children
+      if (expandedKeys === true || expandedKeys.includes(mergedKey)) {
+        flattenNode.children = dig(treeNode.children || [], flattenNode)
+      } else {
+        flattenNode.children = []
       }
+
       return flattenNode
     })
   }
 
-  dig(treeData, 1)
+  dig(treeNodeList)
   return flattenList
 }
 

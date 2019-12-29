@@ -12,7 +12,9 @@
     outline: 0;
 
     span {
-      &.@{treePrefixCls}-checkbox {
+      &.@{treePrefixCls}-switcher,
+      &.@{treePrefixCls}-checkbox,
+      &.@{treePrefixCls}-iconEle {
         display: inline-block;
         width: 16px;
         height: 16px;
@@ -28,6 +30,18 @@
         cursor: pointer;
       }
 
+      &.@{treePrefixCls}-switcher {
+        &.@{treePrefixCls}-switcher-noop {
+          cursor: auto;
+        }
+        &.@{treePrefixCls}-switcher_open {
+          background-position: -93px -56px;
+        }
+        &.@{treePrefixCls}-switcher_close {
+          background-position: -75px -56px;
+        }
+      }
+
       &.@{treePrefixCls}-checkbox {
         width: 13px;
         height: 13px;
@@ -36,8 +50,72 @@
         &-checked {
           background-position: -14px 0;
         }
+        &-indeterminate {
+          background-position: -14px -28px;
+        }
+        &-disabled {
+          background-position: 0 -56px;
+        }
+        &.@{treePrefixCls}-checkbox-checked.@{treePrefixCls}-checkbox-disabled {
+          background-position: -14px -56px;
+        }
+        &.@{treePrefixCls}-checkbox-indeterminate.@{treePrefixCls}-checkbox-disabled {
+          position: relative;
+          background: #ccc;
+          border-radius: 3px;
+          &::after {
+            position: absolute;
+            top: 5px;
+            left: 3px;
+            width: 5px;
+            height: 0;
+            border: 2px solid #fff;
+            border-top: 0;
+            border-left: 0;
+            -webkit-transform: scale(1);
+            transform: scale(1);
+            content: ' ';
+          }
+        }
       }
     }
+  }
+
+  &:not(.@{treePrefixCls}-show-line) {
+    .@{treeNodePrefixCls} {
+      .@{treePrefixCls}-switcher-noop {
+        background: none;
+      }
+    }
+  }
+
+  &-node-selected {
+    background-color: #ffe6b0;
+    border: 1px solid #ffb951;
+    opacity: 0.8;
+  }
+
+  &-icon__open {
+    margin-right: 2px;
+    vertical-align: top;
+    background-position: -110px -16px;
+  }
+
+  &-icon__close {
+    margin-right: 2px;
+    vertical-align: top;
+    background-position: -100px 0;
+  }
+
+  &-icon__docu {
+    margin-right: 2px;
+    vertical-align: top;
+    background-position: -110px -32px;
+  }
+
+  &-icon__customize {
+    margin-right: 2px;
+    vertical-align: top;
   }
 
   &-indent-unit {
