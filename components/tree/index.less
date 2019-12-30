@@ -11,47 +11,6 @@
     list-style: none;
     outline: 0;
 
-    .draggable {
-      color: #333;
-      -moz-user-select: none;
-      -khtml-user-select: none;
-      -webkit-user-select: none;
-      user-select: none;
-      -khtml-user-drag: element;
-      -webkit-user-drag: element;
-    }
-
-    &.drag-over {
-      > .draggable {
-        color: white;
-        background-color: #316ac5;
-        border: 1px #316ac5 solid;
-        opacity: 0.8;
-      }
-    }
-
-    &.drag-over-gap-top {
-      > .draggable {
-        border-top: 2px blue solid;
-      }
-    }
-
-    &.drag-over-gap-bottom {
-      > .draggable {
-        border-bottom: 2px blue solid;
-      }
-    }
-
-    .@{treePrefixCls}-node-content-wrapper {
-      display: inline-block;
-      height: 17px;
-      margin: 0;
-      padding: 1px 3px 0 0;
-      text-decoration: none;
-      vertical-align: top;
-      cursor: pointer;
-    }
-
     span {
       &.@{treePrefixCls}-switcher,
       &.@{treePrefixCls}-checkbox,
@@ -145,7 +104,7 @@
   &-icon__close {
     margin-right: 2px;
     vertical-align: top;
-    background-position: -110px 0;
+    background-position: -100px 0;
   }
 
   &-icon__docu {

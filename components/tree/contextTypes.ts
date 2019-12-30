@@ -24,20 +24,20 @@ export interface TreeContextProps {
     treeNode: EventDataNode,
     checked: boolean,
   ) => void
-  onNodeClick: NodeMouseEventHandler
+  // onNodeClick: NodeMouseEventHandler
   onNodeExpand: NodeMouseEventHandler
   // onNodeDoubleClick: NodeMouseEventHandler
-  onNodeSelect: NodeMouseEventHandler
+  // onNodeSelect: NodeMouseEventHandler
   // onNodeLoad: (treeNode: EventDataNode) => void
   // onNodeMouseEnter: NodeMouseEventHandler
   // onNodeMouseLeave: NodeMouseEventHandler
   // onNodeContextMenu: NodeMouseEventHandler
-  onNodeDragStart: NodeDragEventHandler
-  onNodeDragEnter: NodeDragEventHandler
-  onNodeDragOver: NodeDragEventHandler
-  onNodeDragLeave: NodeDragEventHandler
-  onNodeDragEnd: NodeDragEventHandler
-  onNodeDrop: NodeDragEventHandler
+  // onNodeDragStart: NodeDragEventHandler
+  // onNodeDragEnter: NodeDragEventHandler
+  // onNodeDragOver: NodeDragEventHandler
+  // onNodeDragLeave: NodeDragEventHandler
+  // onNodeDragEnd: NodeDragEventHandler
+  // onNodeDrop: NodeDragEventHandler
 }
 
 export const TreeContext: React.Context<TreeContextProps | null>

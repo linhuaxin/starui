@@ -14,12 +14,6 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
     dragNodeHighlight: false
   }
 
-  public selectHandle: HTMLSpanElement
-
-  setSelectHandle = node => {
-    this.selectHandle = node
-  }
-
   getNodeState() {
     const { expanded } = this.props
 
@@ -48,19 +42,6 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
     return !!(treeDisabled || disabled)
   }
 
-  isSelectable() {
-    const { selectable } = this.props
-    const {
-      context: { selectable: treeSelectable }
-    } = this.props
-
-    if (typeof selectable === 'boolean') {
-      return selectable
-    }
-
-    return treeSelectable
-  }
-
   hasChildren() {
     const {
       eventKey,
@@ -84,101 +65,6 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
       return false
     }
     return isLeaf || (!loadData && !hasChildren) || (loadData && loaded && !hasChildren)
-  }
-
-  onDragStart = e => {
-    const {
-      context: { onNodeDragStart }
-    } = this.props
-
-    e.stopPropagation()
-    this.setState({
-      dragNodeHighlight: true
-    })
-    onNodeDragStart(e, this)
-
-    try {
-      e.dataTransfer.setData('text/plain', '')
-    } catch (e) {
-      // empty
-    }
-  }
-
-  onDragEnter = e => {
-    const {
-      context: { onNodeDragEnter }
-    } = this.props
-
-    e.preventDefault()
-    e.stopPropagation()
-    onNodeDragEnter(e, this)
-  }
-
-  onDragOver = e => {
-    const {
-      context: { onNodeDragOver }
-    } = this.props
-
-    e.preventDefault()
-    e.stopPropagation()
-    onNodeDragOver(e, this)
-  }
-
-  onDragLeave = e => {
-    const {
-      context: { onNodeDragLeave }
-    } = this.props
-
-    e.stopPropagation()
-    onNodeDragLeave(e, this)
-  }
-
-  onDragEnd = e => {
-    const {
-      context: { onNodeDragEnd }
-    } = this.props
-
-    e.stopPropagation()
-    this.setState({
-      dragNodeHighlight: false
-    })
-    onNodeDragEnd(e, this)
-  }
-
-  onDrop = e => {
-    const {
-      context: { onNodeDrop }
-    } = this.props
-
-    e.preventDefault()
-    e.stopPropagation()
-    this.setState({
-      dragNodeHighlight: false
-    })
-    onNodeDrop(e, this)
-  }
-
-  onSelectorClick = e => {
-    const {
-      context: { onNodeClick }
-    } = this.props
-    onNodeClick(e, convertNodePropsToEventData(this.props))
-
-    if (this.isSelectable()) {
-      this.onSelect(e)
-    } else {
-      this.onCheck(e)
-    }
-  }
-
-  onSelect = e => {
-    if (this.isDisabled()) return
-
-    const {
-      context: { onNodeSelect }
-    } = this.props
-    e.preventDefault()
-    onNodeSelect(e, convertNodePropsToEventData(this.props))
   }
 
   onCheck = e => {
@@ -318,7 +204,6 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
 
     return (
       <span
-        ref={this.setSelectHandle}
         title={typeof title === 'string' ? title : ''}
         className={classNames(
           `${wrapClass}`,
@@ -328,8 +213,6 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
         )}
         draggable={(!disabled && draggable) || undefined}
         aria-grabbed={(!disabled && draggable) || undefined}
-        onClick={this.onSelectorClick}
-        onDragStart={draggable ? this.onDragStart : undefined}
       >
         {$icon}
         {$title}
@@ -340,10 +223,7 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
   render() {
     const {
       eventKey,
-      dragOver,
-      dragOverGapTop,
-      dragOverGapBottom,
-      context: { prefixCls, keyEntities, draggable }
+      context: { prefixCls, keyEntities }
     } = this.props
 
     const { level } = keyEntities[eventKey]
@@ -352,16 +232,8 @@ class TreeNode extends React.Component<InternalTreeNodeProps, TreeNodeState> {
     return (
       <div
         className={classNames(`${prefixCls}-treenode`, {
-          [`${prefixCls}-treenode-disabled`]: disabled,
-          'drag-over': !disabled && dragOver,
-          'drag-over-gap-top': !disabled && dragOverGapTop,
-          'drag-over-gap-bottom': !disabled && dragOverGapBottom,
+          [`${prefixCls}-treenode-disabled`]: disabled
         })}
-        onDragEnter={draggable ? this.onDragEnter : undefined}
-        onDragOver={draggable ? this.onDragOver : undefined}
-        onDragLeave={draggable ? this.onDragLeave : undefined}
-        onDrop={draggable ? this.onDrop : undefined}
-        onDragEnd={draggable ? this.onDragEnd : undefined}
       >
         <Indent prefixCls={prefixCls} level={level}/>
         {this.renderSwitcher()}
