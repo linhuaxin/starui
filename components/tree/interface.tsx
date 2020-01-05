@@ -111,8 +111,8 @@ export interface TreeProps {
     node: EventDataNode
   }) => void
   onDragStart?: (info: {
-    event: React.MouseEvent
-    node: EventDataNode
+    event: React.MouseEvent;
+    node: EventDataNode;
   }) => void
   onDragEnter?: (info: {
     event: React.MouseEvent

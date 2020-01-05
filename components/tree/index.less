@@ -11,6 +11,54 @@
     list-style: none;
     outline: 0;
 
+    .draggable {
+      color: #333;
+      -moz-user-select: none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      user-select: none;
+      -khtml-user-drag: element;
+      -webkit-user-drag: element;
+    }
+
+    &.drag-over {
+      > .draggable {
+        color: white;
+        background-color: #316ac5;
+        border: 1px #316ac5 solid;
+        opacity: 0.8;
+      }
+    }
+
+    &.drag-over-gap-top {
+      > .draggable {
+        border-top: 2px blue solid;
+      }
+    }
+
+    &.drag-over-gap-bottom {
+      > .draggable {
+        border-bottom: 2px blue solid;
+      }
+    }
+
+    &.filter-node {
+      > .@{treePrefixCls}-node-content-wrapper {
+        color: #a60000 !important;
+        font-weight: bold !important;
+      }
+    }
+
+    .@{treePrefixCls}-node-content-wrapper {
+      display: inline-block;
+      height: 17px;
+      margin: 0;
+      padding: 1px 3px 0 0;
+      text-decoration: none;
+      vertical-align: top;
+      cursor: pointer;
+    }
+
     span {
       &.@{treePrefixCls}-switcher,
       &.@{treePrefixCls}-checkbox,
@@ -28,6 +76,10 @@
         border: 0 none;
         outline: none;
         cursor: pointer;
+
+        &.@{treePrefixCls}-icon__customize {
+          background-image: none;
+        }
       }
 
       &.@{treePrefixCls}-switcher {
@@ -89,6 +141,23 @@
     }
   }
 
+  &.@{treePrefixCls}-show-line {
+    .@{treeNodePrefixCls}:not(:last-child) {
+      > ul {
+        background: url('data:image/gif;base64,R0lGODlhCQACAIAAAMzMzP///yH5BAEAAAEALAAAAAAJAAIAAAIEjI9pUAA7')
+          0 0 repeat-y;
+      }
+      > .@{treePrefixCls}-switcher-noop {
+        background-position: -56px -18px;
+      }
+    }
+    .@{treeNodePrefixCls}:last-child {
+      > .@{treePrefixCls}-switcher-noop {
+        background-position: -56px -36px;
+      }
+    }
+  }
+
   &-node-selected {
     background-color: #ffe6b0;
     border: 1px solid #ffb951;
@@ -104,7 +173,7 @@
   &-icon__close {
     margin-right: 2px;
     vertical-align: top;
-    background-position: -100px 0;
+    background-position: -110px 0;
   }
 
   &-icon__docu {
