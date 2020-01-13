@@ -28,7 +28,7 @@ class Notification extends React.Component<NotificationProps, any>{
 
   static defaultProps = {
     prefixCls: 'rc-notification',
-    transitionName: 'fade',
+    animation: 'fade',
     style: {
       top: 65,
       left: '50%'
