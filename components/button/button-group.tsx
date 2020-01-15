@@ -9,37 +9,33 @@ export interface ButtonGroupProps {
   prefixCls?: string;
 }
 
-const ButtonGroup: React.SFC<ButtonGroupProps> = props => (
-  <div>
-    {({ getPrefixCls }: any) => {
-      const { prefixCls: customizePrefixCls, size, className, ...others } = props;
-      const prefixCls = getPrefixCls('btn-group', customizePrefixCls);
+const ButtonGroup: React.SFC<ButtonGroupProps> = props => {
+  const { prefixCls: customizePrefixCls, size, className, ...others } = props;
+  const prefixCls = 'ant-btn-group';
 
-      // large => lg
-      // small => sm
-      let sizeCls = '';
-      switch (size) {
-        case 'large':
-          sizeCls = 'lg';
-          break;
-        case 'small':
-          sizeCls = 'sm';
-          break;
-        default:
-          break;
-      }
+  // large => lg
+  // small => sm
+  let sizeCls = '';
+  switch (size) {
+    case 'large':
+      sizeCls = 'lg';
+      break;
+    case 'small':
+      sizeCls = 'sm';
+      break;
+    default:
+      break;
+  }
 
-      const classes = classNames(
-        prefixCls,
-        {
-          [`${prefixCls}-${sizeCls}`]: sizeCls,
-        },
-        className,
-      );
+  const classes = classNames(
+    prefixCls,
+    {
+      [`${prefixCls}-${sizeCls}`]: sizeCls,
+    },
+    className,
+  );
 
-      return <div {...others} className={classes} />;
-    }}
-  </div>
-);
+  return <div {...others} className={classes} />;
+};
 
 export default ButtonGroup;

@@ -197,16 +197,14 @@ const Icon: IconComponent<IconProps> = props => {
   }
 
   return (
-    <div>
-      <i
-        {...restProps}
-        tabIndex={iconTabIndex}
-        onClick={onClick}
-        className={classString}
-      >
-        {renderInnerNode()}
-      </i>
-    </div>
+    <i
+      {...restProps}
+      tabIndex={iconTabIndex}
+      onClick={onClick}
+      className={classString}
+    >
+      {renderInnerNode()}
+    </i>
   );
 };
 

@@ -4,6 +4,7 @@ import { Omit, tuple } from '../_util/type';
 import Group from './button-group';
 import omit from 'omit.js';
 import './style/index';
+import Icon from '../icon';
 
 const rxTwoCNChar = /^[\u4e00-\u9fa5]{2}$/;
 const isTwoCNChar = rxTwoCNChar.test.bind(rxTwoCNChar);
@@ -238,7 +239,7 @@ class Button extends React.Component<ButtonProps, ButtonState> {
       [`${prefixCls}-block`]: block,
     });
 
-    const iconNode = iconType ? <div /> : null;
+    const iconNode = iconType ? <Icon type={iconType} /> : null;
     const kids =
       children || children === 0
         ? spaceChildren(children, this.isNeedInserted() && autoInsertSpace)
